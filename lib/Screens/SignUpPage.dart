@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_6amtech/AppConfig/AppConfig.dart';
+import 'package:test_6amtech/AppConfig/GetRequests.dart';
 import 'package:test_6amtech/Screens/MainNavigation/NavigationMain.dart';
 import 'package:test_6amtech/Widgets/Widgets.dart';
 
@@ -160,10 +161,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             loading = true;
                           });
                           int response = await _signUpWithEmailPassword();
-                          setState(() {
-                            loading = false;
-                          });
                           if(response==200 || response==201){
+                            await GetRequests().getAllCategoryItems(context);
+                            await GetRequests().getAllSetMenuItems(context);
+                            await GetRequests().getAllBannerItems(context);
+                            await GetRequests().getAllProducts(context);
+                            setState(() {
+                              loading = false;
+                            });
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NavigationMain()));
                           }
                         },
@@ -225,10 +230,6 @@ class _SignUpPageState extends State<SignUpPage> {
           data: formData,
         );
 
-        if(response.statusCode==200 || response.statusCode==201){
-          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-          await sharedPreferences.setString("email", email);
-        }
         return response.statusCode;
       }
       catch(error){

@@ -32,6 +32,7 @@ dependencies:
   shared_preferences:
   dio:
   fluttertoast:
+  provider:
 
 dev_dependencies:
   flutter_test:
